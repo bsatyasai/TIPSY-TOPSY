@@ -1,21 +1,10 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import App from './App.tsx';
+import './index.css';
 
-function App() {
-  return (
-    <div style={{
-      fontFamily: 'Arial',
-      padding: '40px',
-      textAlign: 'center'
-    }}>
-      <h1>🔥 TIPSY-TOPSY</h1>
-      <p>Your fashion website is live!</p>
-    </div>
-  )
-}
-
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
     <App />
-  </React.StrictMode>,
-)
+  </StrictMode>,
+);

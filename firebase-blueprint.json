@@ -1,0 +1,66 @@
+{
+  "entities": {
+    "product": {
+      "title": "Product",
+      "description": "Fashion items available for purchase.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "price": { "type": "number" },
+        "images": { "type": "array", "items": { "type": "string" } },
+        "category": { "type": "string" },
+        "sizes": { "type": "array", "items": { "type": "string" } },
+        "colors": { "type": "array", "items": { "type": "string" } },
+        "stock": { "type": "number" },
+        "rating": { "type": "number" },
+        "reviews": { "type": "number" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "isNewArrival": { "type": "boolean" },
+        "isTrending": { "type": "boolean" },
+        "discountPrice": { "type": "number" }
+      },
+      "required": ["name", "price", "category"]
+    },
+    "user": {
+      "title": "User",
+      "description": "Customer profile information.",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "isAdmin": { "type": "boolean" },
+        "wishlist": { "type": "array", "items": { "type": "string" } },
+        "cart": { "type": "array", "items": { "type": "object" } }
+      }
+    },
+    "order": {
+      "title": "Order",
+      "description": "Customer purchase history.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "items": { "type": "array" },
+        "total": { "type": "number" },
+        "status": { "type": "string", "enum": ["pending", "processing", "shipped", "delivered", "cancelled"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "shippingAddress": { "type": "object" }
+      }
+    }
+  },
+  "firestore": {
+    "products": {
+      "schema": "product",
+      "description": "Collection of available fashion items."
+    },
+    "users": {
+      "schema": "user",
+      "description": "Customer profiles and private data."
+    },
+    "orders": {
+      "schema": "order",
+      "description": "Customer orders and payment records."
+    }
+  }
+}
