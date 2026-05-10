@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ShoppingCart, Heart, Star } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
+import { useNavigate } from 'react-router-dom';
 
 interface ProductCardProps {
   product: {
@@ -16,11 +17,13 @@ interface ProductCardProps {
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { addToCart } = useCart();
+  const navigate = useNavigate();
 
   return (
     <motion.div 
       whileHover={{ y: -5 }}
-      className="glass-card rounded-3xl overflow-hidden group border border-white/5 hover:border-pink-500/30 transition-all duration-300"
+      onClick={() => navigate(`/product/${product.id}`)}
+      className="glass-card rounded-3xl overflow-hidden group border border-white/5 hover:border-pink-500/30 transition-all duration-300 cursor-pointer"
     >
       <div className="aspect-[3/4] relative overflow-hidden">
         <img 
@@ -29,11 +32,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
         />
         <div className="absolute top-4 right-4 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button className="w-10 h-10 rounded-full glass flex items-center justify-center text-white hover:bg-pink-500 hover:border-pink-500 transition-all">
+          <button 
+            onClick={(e) => { e.stopPropagation(); /* Logic for wishlist */ }}
+            className="w-10 h-10 rounded-full glass flex items-center justify-center text-white hover:bg-pink-500 hover:border-pink-500 transition-all"
+          >
             <Heart className="w-4 h-4" />
           </button>
           <button 
-            onClick={() => addToCart({ ...product, quantity: 1 })}
+            onClick={(e) => { e.stopPropagation(); addToCart({ ...product, quantity: 1 }); }}
             className="w-10 h-10 rounded-full glass flex items-center justify-center text-white hover:bg-blue-500 hover:border-blue-500 transition-all"
           >
             <ShoppingCart className="w-4 h-4" />

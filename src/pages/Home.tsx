@@ -116,6 +116,52 @@ export const Home: React.FC = () => {
           ))}
         </div>
       </div>
+
+      {/* Influencer Gallery Section */}
+      <section className="relative z-10 container mx-auto px-6 lg:px-12 py-24 space-y-12">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 text-center md:text-left">
+          <div className="space-y-4">
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-pink-500">Live from the Grid</span>
+            <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter italic">COLLECTOR MOMENTS</h2>
+          </div>
+          <p className="text-gray-500 text-sm font-bold uppercase tracking-widest max-w-xs">
+            Join 45k+ collectors showcasing the evolution of streetwear.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {[
+            { img: 'https://images.unsplash.com/photo-1529139513477-3235a8f4df5a?auto=format&fit=crop&q=80&w=600', user: '@vogue_glitch' },
+            { img: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=600', user: '@style_junkie' },
+            { img: 'https://images.unsplash.com/photo-1581044777550-4cfa60707c03?auto=format&fit=crop&q=80&w=600', user: '@cyber_nomad' },
+            { img: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&q=80&w=600', user: '@digital_aura' }
+          ].map((item, i) => (
+            <motion.div 
+              key={i}
+              whileHover={{ scale: 1.02 }}
+              className="aspect-square rounded-[30px] overflow-hidden relative group cursor-pointer"
+            >
+              <img src={item.img} alt="" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                 <div className="text-[10px] font-black uppercase text-white tracking-widest">{item.user}</div>
+              </div>
+              <div className="absolute top-4 right-4 w-8 h-8 glass rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                 <Instagram className="w-4 h-4 text-white" />
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        <div className="flex justify-center">
+          <button className="px-10 py-4 glass border border-white/20 font-black uppercase tracking-tighter rounded-full hover:bg-white hover:text-black transition-all">
+            Join the Gallery
+          </button>
+        </div>
+      </section>
     </div>
   );
 };
+
+const Instagram = ({ className }: { className?: string }) => (
+  <svg className={className} fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.791 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.441 1.441 1.441c.795 0 1.439-.645 1.439-1.441s-.644-1.44-1.439-1.44z"/></svg>
+);
