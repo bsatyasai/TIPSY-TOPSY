@@ -1,8 +1,25 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { ArrowRight, Sparkles, Zap, Globe, MessageCircle } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowRight, Sparkles, Zap, Globe, MessageCircle, Brain, RefreshCw } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { getStylingAdvice } from '../services/geminiService';
 
 export const Home: React.FC = () => {
+  const navigate = useNavigate();
+  const [aiAdvice, setAiAdvice] = useState<string | null>(null);
+  const [isAiLoading, setIsAiLoading] = useState(false);
+
+  const fetchAiAdvice = async () => {
+    setIsAiLoading(true);
+    const advice = await getStylingAdvice("Suggest a trending cyberpunk streetwear look for today.");
+    setAiAdvice(advice);
+    setIsAiLoading(false);
+  };
+
+  useEffect(() => {
+    fetchAiAdvice();
+  }, []);
+
   return (
     <div className="relative pt-24 min-h-screen overflow-hidden">
       {/* Background Mesh Elements */}
@@ -32,10 +49,16 @@ export const Home: React.FC = () => {
           </motion.div>
 
           <div className="flex flex-wrap gap-4">
-            <button className="px-8 py-4 bg-white text-black font-bold uppercase tracking-tighter rounded-full hover:bg-pink-400 hover:text-white transition-all transform hover:scale-105">
+            <button 
+              onClick={() => navigate('/new')}
+              className="px-8 py-4 bg-white text-black font-bold uppercase tracking-tighter rounded-full hover:bg-pink-400 hover:text-white transition-all transform hover:scale-105"
+            >
               Explore Collection
             </button>
-            <button className="px-8 py-4 glass border border-white/20 font-bold uppercase tracking-tighter rounded-full flex items-center space-x-2 hover:bg-white/10 transition-colors">
+            <button 
+              onClick={() => navigate('/ai-stylist')}
+              className="px-8 py-4 glass border border-white/20 font-bold uppercase tracking-tighter rounded-full flex items-center space-x-2 hover:bg-white/10 transition-colors"
+            >
               <span>AI Stylist</span>
               <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
             </button>
@@ -62,16 +85,51 @@ export const Home: React.FC = () => {
           </div>
         </div>
 
-        {/* Right Hero Image Card */}
+        {/* Right Hero Image Card / AI Suggestion Overlay */}
         <motion.div 
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8 }}
           className="lg:w-1/2 w-full aspect-[4/5] relative"
         >
-          <div className="w-full h-full rounded-[40px] overflow-hidden glass-card p-6 flex flex-col justify-end">
-            <div className="absolute inset-0 bg-cover bg-center opacity-60 mix-blend-overlay" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=1000')" }}></div>
+          <div className="w-full h-full rounded-[40px] overflow-hidden glass-card p-6 flex flex-col justify-end group">
+            <div className="absolute inset-0 bg-cover bg-center opacity-60 mix-blend-overlay transition-transform duration-700 group-hover:scale-110" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=1000')" }}></div>
             
+            {/* AI Advice Overlay */}
+            <div className="absolute top-8 right-8 left-8 transition-all duration-500">
+              <AnimatePresence mode="wait">
+                {aiAdvice && !isAiLoading ? (
+                  <motion.div 
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 20 }}
+                    className="glass p-6 rounded-3xl border border-blue-500/30 bg-blue-500/10 backdrop-blur-xl space-y-3"
+                  >
+                     <div className="flex justify-between items-center">
+                        <div className="flex items-center space-x-2">
+                           <Brain className="w-4 h-4 text-blue-400" />
+                           <span className="text-[10px] font-black uppercase text-blue-400 tracking-widest">Neural Suggestion</span>
+                        </div>
+                        <button onClick={fetchAiAdvice} className="hover:rotate-180 transition-transform duration-500">
+                           <RefreshCw className="w-3 h-3 text-gray-500" />
+                        </button>
+                     </div>
+                     <p className="text-xs italic font-medium leading-relaxed line-clamp-3">"{aiAdvice}"</p>
+                  </motion.div>
+                ) : (
+                  <motion.div 
+                    key="loading"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="glass p-6 rounded-3xl border border-white/10 flex items-center justify-center space-x-3"
+                  >
+                     <RefreshCw className="w-4 h-4 animate-spin text-blue-400" />
+                     <span className="text-[10px] font-black uppercase tracking-widest">Syncing Stylist DNA...</span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
             {/* Featured Product Overlay */}
             <div className="relative z-20 w-full glass-dark rounded-3xl p-6 flex justify-between items-center border border-white/20">
               <div>
@@ -82,13 +140,16 @@ export const Home: React.FC = () => {
                   <span className="text-sm line-through text-gray-500">$245.00</span>
                 </div>
               </div>
-              <button className="w-12 h-12 bg-pink-500 rounded-full flex items-center justify-center shadow-lg shadow-pink-500/20 hover:scale-110 transition-transform">
+              <button 
+                onClick={() => navigate('/product/1')}
+                className="w-12 h-12 bg-pink-500 rounded-full flex items-center justify-center shadow-lg shadow-pink-500/20 hover:scale-110 transition-transform"
+              >
                 <ArrowRight className="w-6 h-6 text-white" />
               </button>
             </div>
 
             {/* Influencer Badge */}
-            <div className="absolute top-8 left-8 glass border border-white/20 rounded-2xl p-4 flex items-center space-x-3">
+            <div className="absolute bottom-[100px] left-8 glass border border-white/20 rounded-2xl p-4 flex items-center space-x-3">
               <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-yellow-400 to-pink-500 p-[2px]">
                  <div className="w-full h-full rounded-full bg-black border border-black overflow-hidden">
                     <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=StyleJunkie" alt="Influencer" className="w-full h-full object-cover" />
@@ -96,7 +157,7 @@ export const Home: React.FC = () => {
               </div>
               <div>
                 <div className="text-xs font-bold">@style_junkie</div>
-                <div className="text-[10px] text-gray-400 uppercase tracking-tighter italic">Wearing Size L</div>
+                <div className="text-[10px] text-gray-400 uppercase tracking-tighter italic">Verified Collector</div>
               </div>
             </div>
           </div>
